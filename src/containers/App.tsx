@@ -1,16 +1,40 @@
 import React, { Component } from 'react';
 import './App.scss';
 import Persons from '../components/persons/Persons';
+import Cockpit from '../components/cockpit/cockpit';
 
 class App extends Component{
+  constructor(props:any){
+    super(props);
+    console.log('[App.tsx] constructor');
+  }
   state={
     className:[
       { id:'1', name:"selva", age: 40},
       { id:'2', name:"raja", age: 80},
       { id:'3', name:"shiva", age: 60}
     ],
-    showPerson: true,
+    showPerson: false,
+    showCockpit: true
   };
+
+  static getDerivedStateFromProps(props:any, state:any){
+    console.log('[App.tsx] getDerivedStateFromProps', props);
+    return state;
+  }
+
+  componentDidMount(){
+    console.log('[App.tsx] componentdidmount');
+  }
+
+  shouldComponentUpdate(nextProps:any, nextState:any){
+    console.log('[App.tsx] shouldcomponentupdate');
+    return true;
+  }
+
+  componentDidUpdate(){
+    console.log('[App.tsx] componentdidupdate');
+  }
 
   clickEventHandler = (newName:any) =>
   this.setState({
@@ -56,6 +80,8 @@ class App extends Component{
   }
 
   render(){
+    
+    console.log('[App.tsx] render');
 
     const appStyle = {
       backgroundColor: 'pink',
@@ -72,11 +98,16 @@ class App extends Component{
       );
     }
     return(
+      
+      
       <div className = "App">
-        <header className = "App-header">
-          <button onClick = {this.toggleEventHandler} style = {appStyle}>Click me</button>
+        <button onClick={()=>{
+      this.setState({showCockpit:false});
+    }}>Remove cockpit</button>
+        {this.state.showCockpit ?<Cockpit
+         clicked = {this.toggleEventHandler}/>:null}
           {personName}
-        </header>
+        
       </div>
     )
   }

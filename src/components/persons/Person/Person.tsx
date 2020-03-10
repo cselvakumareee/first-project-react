@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Person.scss';
 
-const person = (props:any) => {
-   return(
-       <div className = "person" onClick = {props.click}>
-           <h4>I am {props.name} with {props.age} age</h4>
-   <p>{props.children}</p>
-   <input type="text" onChange = {props.changed}/>
-       </div>
-   );
-}; 
+ interface personInterface {
+    name: string;
+    age: string;
+    click: any;
+    changed: any;
+}
 
-export default person;
+class Person extends React.Component<personInterface, {}> {
+    
+    render(){
+        console.log('[person.tsx] is rending');
+        return(
+            <div className = "person">
+                <h4 onClick = {this.props.click}>I am {this.props.name} with {this.props.age} age</h4>
+        <p>{this.props.children}</p>
+        <input type="text" onChange = {this.props.changed}/>
+            </div>
+        );
+    }
+   
+}; 
+ 
+export default Person;
