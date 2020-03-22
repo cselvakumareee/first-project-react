@@ -7,8 +7,16 @@ import Tabs from '../components/Tabs';
 import Home from '../components/home/Home';
 import User from '../components/user/User';
 import Contact from '../components/contact/Contact';
+import WithClass from '../hoc/WithClass';
+import AuthContext from '../context/AuthContext';
 
 import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
+import classes from '*.module.css';
+
+// interface AppInterface {
+//  changeCounter: string;
+
+// }
 
 class App extends React.Component {
   constructor(props: any) {
@@ -22,7 +30,9 @@ class App extends React.Component {
       { id: '3', name: 'shiva', age: 60 }
     ],
     showPerson: false,
-    showCockpit: true
+    showCockpit: true,
+    changeCounter: 0,
+    authenticate: false
   };
 
   static getDerivedStateFromProps(props: any, state: any) {
@@ -65,7 +75,9 @@ class App extends React.Component {
     const className = [...this.state.className];
 
     className[personIndex] = person;
-    this.setState({ className: className });
+    this.setState((prevState, props) => {
+      return { className: className, changeCounter: this.state.changeCounter + 1 };
+    });
   };
   // this.setState({
   //   className:[
@@ -86,12 +98,14 @@ class App extends React.Component {
     this.setState({ personDel: personDel });
   };
 
+  loginHandler = () => {
+    this.setState({
+      authenticate: true
+    });
+  };
 
   render() {
     console.log('[App.tsx] render');
-
-    
-  
 
     const appStyle = {
       backgroundColor: 'pink'
@@ -101,44 +115,45 @@ class App extends React.Component {
     if (this.state.showPerson) {
       personName = (
         <div>
-          <Persons className={this.state.className} clicked={this.deleteEventHandler} changed={this.nameChangeHandler} />
+          <Persons className={this.state.className} isAuthenticate = {this.state.authenticate}
+          clicked={this.deleteEventHandler} changed={this.nameChangeHandler} />
         </div>
       );
     }
     return (
-      <div className="App">
+      <WithClass classes={App}>
         <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/contact">contact</Link>
-            </li>
-            <li>
-              <Link to="/user">User</Link>
-            </li>
-          </ul>
-        </nav>
+          <div>
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/contact">contact</Link>
+                </li>
+                <li>
+                  <Link to="/user">User</Link>
+                </li>
+              </ul>
+            </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
+            {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/contact">
-            <Contact />
-          </Route>
-          <Route path="/user">
-            <User />
-          </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
-   
+            <Switch>
+              <Route path="/contact">
+                <Contact />
+              </Route>
+              <Route path="/user">
+                <User />
+              </Route>
+              <Route exact path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+
         <button
           onClick={() => {
             this.setState({ showCockpit: false });
@@ -146,8 +161,11 @@ class App extends React.Component {
         >
           Remove cockpit
         </button>
-        {this.state.showCockpit ? <Cockpit clicked={this.toggleEventHandler} /> : null}
+
+        <AuthContext.Provider value = {{authenticate: this.state.authenticate, login:this.loginHandler}}>
+        {this.state.showCockpit ? <Cockpit login={this.loginHandler} clicked={this.toggleEventHandler} /> : null}
         {personName}
+        </AuthContext.Provider>
         {/* Tab-functionality, its working
         <div>
           <h1>Tabs Demo</h1>
@@ -164,7 +182,7 @@ class App extends React.Component {
             </Tabs>
           </main>
         </div>*/}
-      </div> 
+      </WithClass>
     );
   }
 }
