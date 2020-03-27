@@ -12,6 +12,7 @@ import AuthContext from '../context/AuthContext';
 
 import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import classes from '*.module.css';
+import Blog from './Blog/Blog';
 
 // interface AppInterface {
 //  changeCounter: string;
@@ -121,68 +122,71 @@ class App extends React.Component {
       );
     }
     return (
-      <WithClass classes={App}>
-        <Router>
-          <div>
-            <nav>
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/contact">contact</Link>
-                </li>
-                <li>
-                  <Link to="/user">User</Link>
-                </li>
-              </ul>
-            </nav>
+      // <WithClass classes={App}>
+      //   <Router>
+      //     <div>
+      //       <nav>
+      //         <ul>
+      //           <li>
+      //             <Link to="/">Home</Link>
+      //           </li>
+      //           <li>
+      //             <Link to="/contact">contact</Link>
+      //           </li>
+      //           <li>
+      //             <Link to="/user">User</Link>
+      //           </li>
+      //         </ul>
+      //       </nav>
 
-            {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-            <Switch>
-              <Route path="/contact">
-                <Contact />
-              </Route>
-              <Route path="/user">
-                <User />
-              </Route>
-              <Route exact path="/">
-                <Home />
-              </Route>
-            </Switch>
-          </div>
-        </Router>
+      //       {/* A <Switch> looks through its children <Route>s and
+      //       renders the first one that matches the current URL. */}
+      //       <Switch>
+      //         <Route path="/contact">
+      //           <Contact />
+      //         </Route>
+      //         <Route path="/user">
+      //           <User />
+      //         </Route>
+      //         <Route exact path="/">
+      //           <Home />
+      //         </Route>
+      //       </Switch>
+      //     </div>
+      //   </Router>
 
-        <button
-          onClick={() => {
-            this.setState({ showCockpit: false });
-          }}
-        >
-          Remove cockpit
-        </button>
+      //   <button
+      //     onClick={() => {
+      //       this.setState({ showCockpit: false });
+      //     }}
+      //   >
+      //     Remove cockpit
+      //   </button>
 
-        <AuthContext.Provider value = {{authenticate: this.state.authenticate, login:this.loginHandler}}>
-        {this.state.showCockpit ? <Cockpit login={this.loginHandler} clicked={this.toggleEventHandler} /> : null}
-        {personName}
-        </AuthContext.Provider>
-        {/* Tab-functionality, its working
-        <div>
-          <h1>Tabs Demo</h1>
-          <main>
-            <Tabs>
-              <a href="https://www.youtube.com/results?search_query=how+to+make+tabs+in+react+js" target="_blank">
-                One
-              </a>
-              <span>Well here's a nested Tabs element.</span>
-              Two
-              <span>Two thing</span>
-              Three
-              <span>Three thing</span>
-            </Tabs>
-          </main>
-        </div>*/}
-      </WithClass>
+      //   <AuthContext.Provider value = {{authenticate: this.state.authenticate, login:this.loginHandler}}>
+      //   {this.state.showCockpit ? <Cockpit login={this.loginHandler} clicked={this.toggleEventHandler} /> : null}
+      //   {personName}
+      //   </AuthContext.Provider>
+      //   {/* Tab-functionality, its working
+      //   <div>
+      //     <h1>Tabs Demo</h1>
+      //     <main>
+      //       <Tabs>
+      //         <a href="https://www.youtube.com/results?search_query=how+to+make+tabs+in+react+js" target="_blank">
+      //           One
+      //         </a>
+      //         <span>Well here's a nested Tabs element.</span>
+      //         Two
+      //         <span>Two thing</span>
+      //         Three
+      //         <span>Three thing</span>
+      //       </Tabs>
+      //     </main>
+      //   </div>*/}
+      // </WithClass>
+      <div className="App">
+        <Blog />
+      </div>
     );
   }
 }
