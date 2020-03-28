@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axios from '../../../axios'; //this axios is referring the instance in axios.tsx
+//import axios from 'axios';
 
 import './FullPost.scss';
 
@@ -32,7 +33,7 @@ class FullPost extends Component<IfullpostProps, {}> {
   componentDidUpdate() {
     if (this.props.blockid) {
       if(!this.state.loadedPost||(this.state.loadedPost && this.state.loadedPost.id !== this.props.blockid)){
-        axios.get('https://jsonplaceholder.typicode.com/posts/' + this.props.blockid).then(response => {
+        axios.get('/posts/' + this.props.blockid).then(response => {
             
             this.setState({ loadedPost: response.data });
           });
@@ -40,6 +41,14 @@ class FullPost extends Component<IfullpostProps, {}> {
      
     }
   }
+
+  deletePostHandler = () =>{
+    axios.delete('/posts/' + this.props.blockid)
+    .then(response =>{
+      console.log(response);
+    });
+  }
+
   render() {
     let post = <p style={{textAlign:"center"}}>Please select a Post!</p>;
     if (this.props.blockid) {
@@ -51,7 +60,7 @@ class FullPost extends Component<IfullpostProps, {}> {
           <h1>{this.state.loadedPost.title}</h1>
           <p>{this.state.loadedPost.body}</p>
           <div className="Edit">
-            <button className="Delete">Delete</button>
+            <button onClick={this.deletePostHandler} className="Delete">Delete</button>
           </div>
         </div>
       );
