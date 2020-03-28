@@ -5,12 +5,9 @@ import FullPost from '../../components/Http-components/FullPost/FullPost';
 import NewPost from '../../components/Http-components/NewPost/NewPost';
 import './Blog.scss';
 
-interface Iblogprops {
-    
-id:any;
-}
 
-class Blog extends Component<Iblogprops,{}> {
+
+class Blog extends Component {
     constructor(props:any){
       super(props);
     }
