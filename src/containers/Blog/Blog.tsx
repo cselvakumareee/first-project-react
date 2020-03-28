@@ -6,16 +6,17 @@ import NewPost from '../../components/Http-components/NewPost/NewPost';
 import './Blog.scss';
 
 interface Iblogprops {
-    title : any
-
+    
+id:any;
 }
 
-class Blog extends Component {
+class Blog extends Component<Iblogprops,{}> {
     constructor(props:any){
       super(props);
     }
      state = {
-         posts:[]
+         posts:[],
+         seletedPost:null
      }
 
     componentDidMount(){
@@ -32,9 +33,13 @@ class Blog extends Component {
             console.log(response);
         })
     }
+
+    postSelectedHandler = (id:any) =>{
+       this.setState({seletedPost:id});
+    }
     render () {
         const posts = this.state.posts.map((post:any) =>{
-           return <Post key={post.id} title={post.title} author={post.author}/>;
+           return <Post key={post.id} title={post.title} author={post.author} clicked={()=>this.postSelectedHandler(post.id)}/>;
         });
 
         return (
@@ -43,7 +48,7 @@ class Blog extends Component {
                     {posts}
                 </section>
                 <section>
-                    <FullPost />
+                    <FullPost blockid={this.state.seletedPost}/>
                 </section>
                 <section>
                     <NewPost />

@@ -14,12 +14,12 @@ import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import classes from '*.module.css';
 import Blog from './Blog/Blog';
 
-// interface AppInterface {
-//  changeCounter: string;
+interface AppInterface {
+ changeCounter: string;
+ id:any
+}
 
-// }
-
-class App extends React.Component {
+class App extends React.Component<AppInterface,{}> {
   constructor(props: any) {
     super(props);
     console.log('[App.tsx] constructor');
