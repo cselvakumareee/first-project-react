@@ -13,6 +13,7 @@ import AuthContext from '../context/AuthContext';
 import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import classes from '*.module.css';
 import Blog from './Blog/Blog';
+import { BrowserRouter } from 'react-router-dom';
 
 
 
@@ -181,9 +182,13 @@ class App extends React.Component{
       //     </main>
       //   </div>*/}
       // </WithClass>
+      <BrowserRouter>
       <div className="App">
+        
         <Blog />
+       
       </div>
+      </BrowserRouter>
     );
   }
 }
