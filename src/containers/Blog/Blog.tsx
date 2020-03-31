@@ -1,16 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 //import axios from 'axios';
 import axios from '../../axios'; //this axios is referring the instance in axios.tsx
 import Posts from '../Blog/Posts/Posts';
 import './Blog.scss';
-import { Route } from 'react-router';
-import NewPost from '../Blog/NewPost/NewPost';
+import { Route, Switch, Redirect } from 'react-router';
+//import NewPost from '../Blog/NewPost/NewPost';
 import FullPost from '../Blog/FullPost/FullPost';
 import { Link, NavLink } from 'react-router-dom';
+import asyncComponent from '../../hoc/asyncComponent';
+
+const AsyncNewPost = asyncComponent(()=>{
+  return import('../Blog/NewPost/NewPost');
+});
+
+const NewPostComponent = React.lazy(()=> import('../Blog/NewPost/NewPost'));
+
 
 class Blog extends Component {
   constructor(props: any) {
     super(props);
+  }
+
+  state={
+    auth:true
   }
 
   render() {
@@ -21,8 +33,8 @@ class Blog extends Component {
             <ul>
               {/* the activeClassName is used for changing active class name. we can change to activeClassName = my-active. so we can apply css styles to my-active class name*/}
               <li>
-                <NavLink exact to="/" activeClassName="active" activeStyle={{color:'#231f20', textDecoration:'overline'}}>
-                  Home
+                <NavLink exact to="/posts" activeClassName="active" activeStyle={{ color: '#231f20', textDecoration: 'overline' }}>
+                  Posts
                 </NavLink>
               </li>
 
@@ -41,16 +53,16 @@ class Blog extends Component {
             </ul>
           </nav>
         </header>
-        <Route exact path="/" component={Posts} />
-        <Route path="/new-post" component={NewPost} />
-         <Route exact path="/:id" component={FullPost} /> 
+        <Switch>
+          {this.state.auth? <Route path="/new-post" component={AsyncNewPost} />:null} 
+         
+         {/* {this.state.auth?<Route path="/new-post" render={()=>(<Suspense {...this.props} fallback={<div>Loading...</div>}><NewPostComponent/></Suspense>)}/>:null} */}
+          <Route path="/posts" component={Posts} />
+           <Redirect from="/" to="/posts" /> 
+          {/* <Route render={()=><h1>Page not found</h1>}/> */}
+        </Switch>
         {/* <Route exact path="/" render = {()=><h1>Home</h1>} /> */}
-        {/* <section>
-                    <FullPost blockid={this.state.seletedPost}/>
-                </section>
-                <section>
-                    <NewPost />
-                </section> */}
+       
       </div>
     );
   }

@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import axios from '../../../axios'; //this axios is referring the instance in axios.tsx
 //import axios from 'axios';
 import './NewPost.scss';
+import { Redirect } from 'react-router';
 
-class NewPost extends Component {
+interface InewpostProps{
+    history:any
+}
+
+class NewPost extends Component<InewpostProps,{}> {
     state = {
         title: '',
         content: '',
-        author: 'SelvakumarChinnappan'
+        author: 'SelvakumarChinnappan',
+        submitted:false
     }
     
     componentDidMount(){
@@ -23,12 +29,21 @@ class NewPost extends Component {
       axios.post("/posts",data)
       .then(response =>{
           console.log(response);
-      })
+          this.props.history.push('/posts'); //you can use replace also instead of push
+          //this.setState({submitted:true});
+      });
+      
     }
 
     render () {
+        let redirect = null;
+        if(this.state.submitted){
+         redirect = <Redirect to="/posts" />
+        }
         return (
             <div className="NewPost">
+                {redirect}
+                
                 <h1>Add a Post</h1>
                 <label>Title</label>
                 <input type="text" value={this.state.title} onChange={(event) => this.setState({title: event.target.value})} />
@@ -40,6 +55,7 @@ class NewPost extends Component {
                     <option value="Manu">Manu</option>
                 </select>
                 <button onClick={this.postDataHandler}>Add Post</button>
+                
             </div>
         );
     }
