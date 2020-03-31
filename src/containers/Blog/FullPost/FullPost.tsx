@@ -14,6 +14,7 @@ import './FullPost.scss';
 
 interface IfullpostProps {
   blockid: any;
+  match: any
 }
 
 class FullPost extends Component<IfullpostProps, {}> {
@@ -30,10 +31,11 @@ class FullPost extends Component<IfullpostProps, {}> {
   }
   
 
-  componentDidUpdate() {
-    if (this.props.blockid) {
+  componentDidMount() {
+    console.log(this.props);
+    if (this.props.match.params.id) {
       if(!this.state.loadedPost||(this.state.loadedPost && this.state.loadedPost.id !== this.props.blockid)){
-        axios.get('/posts/' + this.props.blockid).then(response => {
+        axios.get('/posts/' + this.props.match.params.id).then(response => {
             
             this.setState({ loadedPost: response.data });
           });
@@ -51,9 +53,9 @@ class FullPost extends Component<IfullpostProps, {}> {
 
   render() {
     let post = <p style={{textAlign:"center"}}>Please select a Post!</p>;
-    if (this.props.blockid) {
-      post = <p style={{textAlign:"center"}}>Loading...</p>;
-    }
+    // if (this.props.blockid) {
+    //   post = <p style={{textAlign:"center"}}>Loading...</p>;
+    // }
     if (this.state.loadedPost) {
       post = (
         <div className="FullPost">

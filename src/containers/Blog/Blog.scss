@@ -19,6 +19,9 @@
                 &:hover{
                     color: #fa923f;
                 }
+                &.active{
+                    border-bottom: 4px solid #ffcc00;
+                }
             }
         }
     }
