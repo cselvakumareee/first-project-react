@@ -5,7 +5,7 @@ import './NewPost.scss';
 import { Redirect } from 'react-router';
 
 interface InewpostProps{
-    history:any
+   // history:any
 }
 
 class NewPost extends Component<InewpostProps,{}> {
@@ -20,7 +20,7 @@ class NewPost extends Component<InewpostProps,{}> {
         console.log("newpost"+this.props);
     }
     
-    postDataHandler = () =>{
+    postDataHandler = (thisinstance:any) =>{
         const data = {
             title: this.state.title,
             body: this.state.content,
@@ -29,7 +29,7 @@ class NewPost extends Component<InewpostProps,{}> {
       axios.post("/posts",data)
       .then(response =>{
           console.log(response);
-          this.props.history.push('/posts'); //you can use replace also instead of push
+          thisinstance.props.history.push('/posts'); //you can use replace also instead of push & thisinstance is fix idk why im using
           //this.setState({submitted:true});
       });
       
@@ -54,7 +54,7 @@ class NewPost extends Component<InewpostProps,{}> {
                     <option value="Max">Max</option>
                     <option value="Manu">Manu</option>
                 </select>
-                <button onClick={this.postDataHandler}>Add Post</button>
+                <button onClick={this.postDataHandler.bind(this)}>Add Post</button>
                 
             </div>
         );

@@ -54,9 +54,9 @@ class Blog extends Component {
           </nav>
         </header>
         <Switch>
-          {this.state.auth? <Route path="/new-post" component={AsyncNewPost} />:null} 
+          {/* {this.state.auth? <Route path="/new-post" component={AsyncNewPost} />:null}  */}
          
-         {/* {this.state.auth?<Route path="/new-post" render={()=>(<Suspense {...this.props} fallback={<div>Loading...</div>}><NewPostComponent/></Suspense>)}/>:null} */}
+         {this.state.auth?<Route path="/new-post" render={()=>(<Suspense fallback={<div>Loading...</div>}><NewPostComponent/></Suspense>)}/>:null} 
           <Route path="/posts" component={Posts} />
            <Redirect from="/" to="/posts" /> 
           {/* <Route render={()=><h1>Page not found</h1>}/> */}
