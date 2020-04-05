@@ -14,6 +14,7 @@ import { Switch, Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import classes from '*.module.css';
 import Blog from './Blog/Blog';
 import { BrowserRouter } from 'react-router-dom';
+import Counter from '../containers/Counter/Counter';
 
 
 
@@ -188,7 +189,8 @@ class App extends React.Component{
       <BrowserRouter>
       <div className="App">
         
-        <Blog />
+      {/* <Blog /> */}
+      <Counter />
        
       </div>
       </BrowserRouter>
