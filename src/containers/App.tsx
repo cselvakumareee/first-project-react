@@ -186,14 +186,14 @@ class App extends React.Component{
 
 
       // <BrowserRouter basename="/my-app"> //it will help for example.com/my-app/post
-      <BrowserRouter>
+      //<BrowserRouter>
       <div className="App">
         
       {/* <Blog /> */}
       <Counter />
        
       </div>
-      </BrowserRouter>
+     // </BrowserRouter>
     );
   }
 }
