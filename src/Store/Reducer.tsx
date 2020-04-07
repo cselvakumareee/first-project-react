@@ -1,9 +1,8 @@
-import React from 'react';
-import Counter from '../containers/Counter/Counter';
+import * as actionTypes from './Action/actionConstants';
 
-const initialState = {
+const initialState:any = {
   counter: 0,
-  results: new Array
+  results: []
 };
 
 const reducer = (state = initialState, action:any) => {
@@ -11,47 +10,52 @@ const reducer = (state = initialState, action:any) => {
 console.log(action.type);
   switch (action.type) {
       
-    case 'INCREMENT':
+    case actionTypes.INCREMENT:
       //WAY1: it will give copy of state, but its not a deep clone
       const newState = Object.assign({},state);
       newState.counter = state.counter +1;
       return newState;
-    case 'DECREMENT':
+
+    case actionTypes.DECREMENT:
       return {
         //WAY2: spread operator taking out all values in state, and add the additional properties
         ...state,
         counter: state.counter - 1,
         //If property already exist in object, it will override the value
       };
-    case 'ADD':
+
+    case actionTypes.ADD:
       return {
         ...state,
         counter: state.counter + action.val,
       };
-    case 'SUBTRACT':
+    case actionTypes.SUBTRACT:
       return {
         ...state,
         counter: state.counter - action.val,
       };
-    case 'STORE_RESULT':
-      const resultFinal = Object.assign({},state);
-      resultFinal.results = state.results.concat({id: state.counter, value:state.counter});
+    case actionTypes.STORE_RESULT:
+      const resultCounter = [...state.results];
+      resultCounter.push({id: new Date(), value:state.counter});
+      
       return {
-        ...state,
-        results: resultFinal.results
-      }
+       ...state,
+       results: resultCounter
+      };
       
       // return {
       //   ...state,
       //   results: state.results.concat({id: new Date(), value:state.counter})
       // }
       
-    case 'DELETE_RESULT':
-      return state;  
-    default:
-        return state
+    case actionTypes.DELETE_RESULT:
+      const updatedArray = state.results.filter((result:any)=> result.id !== action.resultElId);
+      return {
+        ...state,
+        results: updatedArray
+      };  
   }
-  //return state;
+  return state;
 };
 
 export default reducer;

@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as actionTypes from '../../Store/Action/actionConstants';
 
 import CounterControl from '../../components/Redux-Components/CounterControl/CounterControl';
 import CounterOutput from '../../components/Redux-Components/CounterOutput/CounterOutput';
 
 interface ICounterProps{
     ctr:any,
-    storedResults:any
+   storedResults:any
    onIncrementCounter: any,
    onDecrementCounter:any,
    onAddCounter:any,
    onSubtractCounter:any,
    onStoreResult:any,
-   //onDeleteResult:any
+   onDeleteResult:any
 }
 
 
@@ -26,13 +27,15 @@ class Counter extends Component<ICounterProps,{}> {
                 <CounterControl label="Add 10" clicked={this.props.onAddCounter}  />
                 <CounterControl label="Subtract 10" clicked={this.props.onSubtractCounter}  />
                 <hr />
-                <button onClick={this.props.onStoreResult}>Store Result</button>
-                <ul>
-                    {this.props.storedResults.map((strResult:any) => {
-                     return <li key={strResult.id}>{strResult.value}</li>
-                    })}
+                <button onClick={()=>this.props.onStoreResult(this.props.ctr)}>Store Result</button>
+                {/* Note: The above code ctr is ctr: state.ctr.counter, it will directly give counter value */}
+                  <ul>
+                     {this.props.storedResults.map((strResult:any) => {
+                     return <li onClick={()=>this.props.onDeleteResult(strResult.id)} key={strResult.id}>{strResult.value}</li>
+                    })} 
                     
-                </ul>
+                </ul> 
+                
             </div>
         );
     }
@@ -42,8 +45,11 @@ const mapStateToProps = (state:any) =>{
     
     console.log(state);
     return {
-        ctr: state.counter,
-        storedResults: state.results,
+        ctr: state.ctr.counter,
+        storedResults: state.res.results,
+        //state.ctr its used for accessing states in corresponding reducers
+        //As of now counterReducer containing counter state only vice versa resultReducer containing result state only
+        //state.ctr and state.res used for accessing counter & results values in global state
     };
 }; 
 const mapDispatchToProps = (dispatch:any) =>{
@@ -51,12 +57,13 @@ const mapDispatchToProps = (dispatch:any) =>{
     return {
         onIncrementCounter: ()=> {
             console.log('increment');
-            dispatch({type:'INCREMENT'})},
-        onDecrementCounter: ()=> dispatch({type:'DECREMENT'}),
-        onAddCounter: ()=> dispatch({type:'ADD', val:10}),
-        onSubtractCounter: ()=> dispatch({type:'SUBTRACT', val:10}),
-        onStoreResult: ()=> dispatch({type:'STROE_RESULT'}),
-        OnDeleteResult: ()=> dispatch({type:'DELETE_RESULT'})
+            dispatch({type: actionTypes.INCREMENT})},
+        onDecrementCounter: ()=> dispatch({type: actionTypes.DECREMENT}),
+        onAddCounter: ()=> dispatch({type: actionTypes.ADD, val:10}),
+        onSubtractCounter: ()=> dispatch({type: actionTypes.SUBTRACT, val:10}),
+        //Note: the below code counterVal is actual counter value from counterReducer
+        onStoreResult: (counterVal:any)=> dispatch({type: actionTypes.STORE_RESULT, counterValue:counterVal}),
+        onDeleteResult: (id:any)=> dispatch({type: actionTypes.DELETE_RESULT, resultElId:id}),
     };
 };
 

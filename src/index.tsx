@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
-import { createStore } from 'redux';
-import reducer from './Store/Reducer';
+import { createStore, combineReducers } from 'redux';
+import CounterReducer from './Store/Reducer/Counter';
+import ResultReducer from './Store/Reducer/Result';
+
 import { Provider } from 'react-redux';
 
 import Home from './components/home/Home';
@@ -13,6 +15,11 @@ import Contact from './components/contact/Contact';
 
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
+
+const rootReducer = combineReducers({
+    ctr:CounterReducer,
+    res: ResultReducer
+});
 
 //axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
 axios.defaults.headers.common['Authorization'] = 'OTP TOKEN';
@@ -55,7 +62,7 @@ axios.interceptors.response.use(response=>{
 // </Router>
 // )
 
-const store = createStore(reducer);
+const store = createStore(rootReducer);
 console.log(store.getState());
 
 ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));

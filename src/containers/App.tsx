@@ -16,9 +16,7 @@ import Blog from './Blog/Blog';
 import { BrowserRouter } from 'react-router-dom';
 import Counter from '../containers/Counter/Counter';
 
-
-
-class App extends React.Component{
+class App extends Component{
   constructor(props: any) {
     super(props);
     console.log('[App.tsx] constructor');
@@ -35,50 +33,50 @@ class App extends React.Component{
     authenticate: false
   };
 
-  static getDerivedStateFromProps(props: any, state: any) {
-    console.log('[App.tsx] getDerivedStateFromProps', props);
-    return state;
-  }
+  // static getDerivedStateFromProps(props: any, state: any) {
+  //   console.log('[App.tsx] getDerivedStateFromProps', props);
+  //   return state;
+  // }
 
-  componentDidMount() {
-    console.log('[App.tsx] componentdidmount');
-  }
+  // componentDidMount() {
+  //   console.log('[App.tsx] componentdidmount');
+  // }
 
-  shouldComponentUpdate(nextProps: any, nextState: any) {
-    console.log('[App.tsx] shouldcomponentupdate');
-    return true;
-  }
+  // shouldComponentUpdate(nextProps: any, nextState: any) {
+  //   console.log('[App.tsx] shouldcomponentupdate');
+  //   return true;
+  // }
 
-  componentDidUpdate() {
-    console.log('[App.tsx] componentdidupdate');
-  }
+  // componentDidUpdate() {
+  //   console.log('[App.tsx] componentdidupdate');
+  // }
 
-  clickEventHandler = (newName: any) =>
-    this.setState({
-      className: [
-        { name: 'selvakumar c', age: 40 },
-        { name: 'raja dhaya', age: 80 },
-        { name: 'shiva j', age: 60 }
-      ]
-    });
+  // clickEventHandler = (newName: any) =>
+  //   this.setState({
+  //     className: [
+  //       { name: 'selvakumar c', age: 40 },
+  //       { name: 'raja dhaya', age: 80 },
+  //       { name: 'shiva j', age: 60 }
+  //     ]
+  //   });
 
-  nameChangeHandler = (eventName: any, id: any) => {
-    const personIndex = this.state.className.findIndex(p => {
-      return p.id === id;
-    });
+  // nameChangeHandler = (eventName: any, id: any) => {
+  //   const personIndex = this.state.className.findIndex(p => {
+  //     return p.id === id;
+  //   });
 
-    const person = {
-      ...this.state.className[personIndex]
-    };
-    person.name = eventName.target.value;
+  //   const person = {
+  //     ...this.state.className[personIndex]
+  //   };
+  //   person.name = eventName.target.value;
 
-    const className = [...this.state.className];
+  //   const className = [...this.state.className];
 
-    className[personIndex] = person;
-    this.setState((prevState, props) => {
-      return { className: className, changeCounter: this.state.changeCounter + 1 };
-    });
-  };
+  //   className[personIndex] = person;
+  //   this.setState((prevState, props) => {
+  //     return { className: className, changeCounter: this.state.changeCounter + 1 };
+  //   });
+  // };
   // this.setState({
   //   className:[
   //   { name:"selvakumar c", age: 40},
@@ -87,39 +85,39 @@ class App extends React.Component{
   //   ]
   // })
 
-  toggleEventHandler = () => {
-    const doesShow = this.state.showPerson;
-    this.setState({ showPerson: !doesShow });
-  };
+  // toggleEventHandler = () => {
+  //   const doesShow = this.state.showPerson;
+  //   this.setState({ showPerson: !doesShow });
+  // };
 
-  deleteEventHandler = (personDelIndex: any) => {
-    const personDel = this.state.className;
-    personDel.splice(personDelIndex, 1);
-    this.setState({ personDel: personDel });
-  };
+  // deleteEventHandler = (personDelIndex: any) => {
+  //   const personDel = this.state.className;
+  //   personDel.splice(personDelIndex, 1);
+  //   this.setState({ personDel: personDel });
+  // };
 
-  loginHandler = () => {
-    this.setState({
-      authenticate: true
-    });
-  };
+  // loginHandler = () => {
+  //   this.setState({
+  //     authenticate: true
+  //   });
+  // };
 
   render() {
-    console.log('[App.tsx] render');
+    // console.log('[App.tsx] render');
 
-    const appStyle = {
-      backgroundColor: 'pink'
-    };
+    // const appStyle = {
+    //   backgroundColor: 'pink'
+    // };
 
-    let personName = null;
-    if (this.state.showPerson) {
-      personName = (
-        <div>
-          <Persons className={this.state.className} isAuthenticate = {this.state.authenticate}
-          clicked={this.deleteEventHandler} changed={this.nameChangeHandler} />
-        </div>
-      );
-    }
+    // let personName = null;
+    // if (this.state.showPerson) {
+    //   personName = (
+    //     <div>
+    //       <Persons className={this.state.className} isAuthenticate = {this.state.authenticate}
+    //       clicked={this.deleteEventHandler} changed={this.nameChangeHandler} />
+    //     </div>
+    //   );
+    // }
     return (
       // <WithClass classes={App}>
       //   <Router>
@@ -190,7 +188,7 @@ class App extends React.Component{
       <div className="App">
         
       {/* <Blog /> */}
-      <Counter />
+      <Counter/>
        
       </div>
      // </BrowserRouter>
