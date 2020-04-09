@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import CounterReducer from './Store/Reducer/Counter';
 import ResultReducer from './Store/Reducer/Result';
+import ReduxThunk from 'redux-thunk';
 
 import { Provider } from 'react-redux';
 
@@ -62,7 +64,20 @@ axios.interceptors.response.use(response=>{
 // </Router>
 // )
 
-const store = createStore(rootReducer);
+//Note: Middleware //It will execute b/w action reaches reducer
+const logger = (store:any) => {
+  return (next:any) =>{
+     return (action:any) =>{
+         console.log('[Middleware] Dispatching', action);
+         const result = next(action);
+         console.log('[Middleware] next state', store.getState());
+         return result;
+     }
+  }
+};
+
+//const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, ReduxThunk)));
 console.log(store.getState());
 
 ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));

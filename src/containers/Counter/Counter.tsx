@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../Store/Action/actionConstants';
+import * as actionCreators from '../../Store/Action/Index';
 
 import CounterControl from '../../components/Redux-Components/CounterControl/CounterControl';
 import CounterOutput from '../../components/Redux-Components/CounterOutput/CounterOutput';
@@ -30,8 +30,8 @@ class Counter extends Component<ICounterProps,{}> {
                 <button onClick={()=>this.props.onStoreResult(this.props.ctr)}>Store Result</button>
                 {/* Note: The above code ctr is ctr: state.ctr.counter, it will directly give counter value */}
                   <ul>
-                     {this.props.storedResults.map((strResult:any) => {
-                     return <li onClick={()=>this.props.onDeleteResult(strResult.id)} key={strResult.id}>{strResult.value}</li>
+                     {this.props.storedResults.map((strResult:any, index:any) => {
+                     return <li onClick={()=>this.props.onDeleteResult(index)} key={strResult.id}>{strResult.value}</li>
                     })} 
                     
                 </ul> 
@@ -57,13 +57,23 @@ const mapDispatchToProps = (dispatch:any) =>{
     return {
         onIncrementCounter: ()=> {
             console.log('increment');
-            dispatch({type: actionTypes.INCREMENT})},
-        onDecrementCounter: ()=> dispatch({type: actionTypes.DECREMENT}),
-        onAddCounter: ()=> dispatch({type: actionTypes.ADD, val:10}),
-        onSubtractCounter: ()=> dispatch({type: actionTypes.SUBTRACT, val:10}),
+            dispatch(actionCreators.increment())},
+        onDecrementCounter: ()=> dispatch(actionCreators.decrement()),
+        onAddCounter: ()=> dispatch(actionCreators.add(10)),
+        onSubtractCounter: ()=> dispatch(actionCreators.subtract(10)),
         //Note: the below code counterVal is actual counter value from counterReducer
-        onStoreResult: (counterVal:any)=> dispatch({type: actionTypes.STORE_RESULT, counterValue:counterVal}),
-        onDeleteResult: (id:any)=> dispatch({type: actionTypes.DELETE_RESULT, resultElId:id}),
+        onStoreResult: (counterVal:any)=> dispatch(actionCreators.storeResult(counterVal)),
+        onDeleteResult: (index:any)=> dispatch(actionCreators.deleteResult(index))
+
+        // onIncrementCounter: ()=> {
+        //     console.log('increment');
+        //     dispatch({type: actionTypes.INCREMENT})},
+        // onDecrementCounter: ()=> dispatch({type: actionTypes.DECREMENT}),
+        // onAddCounter: ()=> dispatch({type: actionTypes.ADD, val:10}),
+        // onSubtractCounter: ()=> dispatch({type: actionTypes.SUBTRACT, val:10}),
+        // //Note: the below code counterVal is actual counter value from counterReducer
+        // onStoreResult: (counterVal:any)=> dispatch({type: actionTypes.STORE_RESULT, counterValue:counterVal}),
+        // onDeleteResult: (index:any)=> dispatch({type: actionTypes.DELETE_RESULT, resultElId:index}),
     };
 };
 

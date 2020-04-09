@@ -19,11 +19,19 @@ const reducer = (state = initialState, action: any) => {
       };
 
     case actionTypes.DELETE_RESULT:
-      const updatedArray = state.results.filter((result: any) => result.id !== action.resultElId);
-      return {
-        ...state,
-        results: updatedArray,
-      };
+      //Note: the below splice method will work only when you will pass, index of element
+      const deletedUpdatedArrayFilter = [...state.results];
+             deletedUpdatedArrayFilter.splice(action.resultElId, 1);   
+            return {
+                ...state,
+                results: deletedUpdatedArrayFilter
+            }
+      // Note: the below method also working      
+      // const updatedArray = state.results.filter((result: any) => result.id !== action.resultElId);
+      // return {
+      //   ...state,
+      //   results: updatedArray,
+      // };
   }
   return state;
 };
