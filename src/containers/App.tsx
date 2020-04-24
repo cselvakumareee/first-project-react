@@ -15,6 +15,8 @@ import classes from '*.module.css';
 import Blog from './Blog/Blog';
 import { BrowserRouter } from 'react-router-dom';
 import Counter from '../containers/Counter/Counter';
+import Todo from '../components/Hooks-components/Todo';
+import Forms from '../components/Forms/Forms';
 
 class App extends Component{
   constructor(props: any) {
@@ -188,7 +190,8 @@ class App extends Component{
       <div className="App">
         
       {/* <Blog /> */}
-      <Counter/>
+      {/* <Counter/> */}
+       <Todo />
        
       </div>
      // </BrowserRouter>
