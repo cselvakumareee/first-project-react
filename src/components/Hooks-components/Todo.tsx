@@ -1,80 +1,115 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
 import axios from 'axios';
 
-const Todo = (props:any) => {
-    const [todoName, setTodoName] = useState('');
-    //const inputState = useState('');
-    const [todoList, setTodoList]:any = useState([]);
-    const [data, setData]:any = useState([]);
-    //const todoList:any = [];
-    //Note: the below code explanation of array destruction
-    // todostate: {
-     //   userInput: '',
-     //   todoList: []
-    //}
-    //const [todoState, setTodoState]:any = useState({userInput:'', todoList: [], todos: []});
-    // const fetchData = () => {
-    //     axios.get('https://jsonplaceholder.typicode.com/posts').
-    //     then((response:any)=>{
-    //        const todoData = response.Data;
-    //        const todos:any = [];
-    //        for(let key in todoData){
-    //           todos.push({id: key, name: todoData[key].name})
-    //        }
-    //     setData(todos);
-    //        console.log('todos'+todos);
-    //     });
-    // }
-    useEffect(()=> {
-      
-            axios.get('https://angular-demo-project-684c6.firebaseio.com/todo.json').
-            then((response:any)=>{
-                const todoRef= response.data;
-                const tRef:any=[];
-                for(let key in todoRef){
-                    (tRef.concat({id: key, name: todoRef[key].name}));
-                }
-            setData(tRef);
-            }).catch((error:any)=>{
-                console.log(error);
-            })
-        
-    },[]);
+const Todo = (props: any) => {
+  //const [todoName, setTodoName] = useState('');
+  const [data, setData]: any = useState([]);
+  const [submittedTodo, setSubmittedTodo] = useState(null);
+  const todoInputRef:any = useRef();
 
-    const inputChangeHandler = (event:any) => {
-         //inputState[1](event.target.vaue);
-        // setTodoState({
-        //     userInput: event.target.value,
-        //     todoList: todoState.todoList
-        // });
-        setTodoName(event.target.value);
-    };
-
-    const todoAddHandler = () => {
-        // setTodoState({
-        //     userInput: todoState.userInput,
-        //     todoList: todoState.todoList.concat(todoState.userInput)
-        // });
-        setTodoList(todoList.concat(todoName))
-        axios.post('https://angular-demo-project-684c6.firebaseio.com/todo.json', {name: todoName}).
-        then((response => {
-           // console.log(response.data);
-        })).catch(error => {
-            console.log(error);
+  useEffect(() => {
+    axios
+      .get('https://angular-demo-project-684c6.firebaseio.com/todo.json')
+      .then((response: any) => {
+        const todoData = response.data;
+        const todos = [];
+        for (let key in todoData) {
+          todos.push({ id: key, name: todoData[key].name });
         }
-        )
+        dispatch({ type: 'SET', payLoad: todos });
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+    return () => {
+      console.log('cleanup');
     };
- return (
-     <React.Fragment> 
-         <input type="text" placeholder="Todo" value={todoName} onChange={inputChangeHandler}/>
-         <button type="button" onClick={todoAddHandler}>Add</button>
-          <ul>
-             {data.map((todo:any)=>{
-                return <li key={todo.id}>{todo.name}</li>
-             })}
-         </ul>
-     </React.Fragment>
- );
-}
+  }, []);
+
+//   useEffect(() => {
+//     if (submittedTodo) {
+//       dispatch({ type: 'ADD', payload: submittedTodo });
+//     }
+//   }, [submittedTodo]);
+
+  const mouseMoveHandler = (event: any) => {
+    //console.log(event.clientX, event.clientY);
+  };
+
+  const todoListReducer = (state: any, action: any) => {
+    switch (action.type) {
+      case 'ADD':
+        return state.concat(action.payLoad);
+      case 'SET':
+        return action.payLoad;
+      case 'REMOVE':
+        return state.filter((todo: any) => {
+          return todo.id !== action.payLoad;
+        });
+      default:
+        return state;
+    }
+  };
+
+  const [todoList, dispatch]: any = useReducer(todoListReducer, []);
+
+  useEffect(() => {
+    document.addEventListener('mousemove', mouseMoveHandler);
+    return () => {
+      document.removeEventListener('mousemove', mouseMoveHandler); //return function help to cleanup while compUnmount
+    };
+  }, []); //empty array help to cleanup while compDidmount & if you are not using it will leads to infinite loop
+
+//   const inputChangeHandler = (event: any) => {
+//     setTodoName(event.target.value);
+//   };
+
+  const todoAddHandler = () => {
+      const todoName = todoInputRef.current.value;
+    axios
+      .post('https://angular-demo-project-684c6.firebaseio.com/todo.json', { name: todoName })
+      .then((response) => {
+        // console.log(response.data);
+        setTimeout(() => {
+          const todoItem = { id: response.data.name, name: todoName };
+          dispatch({ type: 'ADD', payload: todoItem });
+        }, 3000);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const todoRemoveHandler = (todoId: any) => {
+    axios
+      .delete(`https://angular-demo-project-684c6.firebaseio.com/todo/${todoId}.json`)
+      .then((res) => {
+        dispatch({ type: 'REMOVE', payload: todoId });
+      })
+      .catch((err) => console.log(err));
+  };
+  return (
+    <React.Fragment>
+      <input type="text" placeholder="Todo" ref={todoInputRef} />
+      <button type="button" onClick={todoAddHandler}>
+        Add
+      </button>
+      <ul>
+        {todoList.map((todo: any) => {
+          return (
+            <li
+              key={todo.id}
+              onClick={() => {
+                todoRemoveHandler(todo.id);
+              }}
+            >
+              {todo.name}
+            </li>
+          );
+        })}
+      </ul>
+    </React.Fragment>
+  );
+};
 
 export default Todo;
